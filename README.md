@@ -20,7 +20,7 @@ pip install yaart
 
 ## Quick Start
 
-1. Create `base_resume.md` in the `Markdown` folder following the `sample.md` template. 
+1. Create `base_resume.md` following the `sample.md` template in the `Markdown` folder
 
 2. 
 ```python
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-3. (Optional) If you want to modify your generated markdown resume, find it in the `Markdown` directory. Once you would like to generate a PDF from it, run the following: 
+3. (Optional) If you want to modify your generated markdown resume, find it in the generated `Markdown` directory. Once you would like to generate a PDF from it, run the following: 
 
 ```python 
 from md2pdf.core import md2pdf
