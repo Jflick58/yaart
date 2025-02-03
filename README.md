@@ -4,6 +4,7 @@ Python package that leverages AI to automatically tailor your resume to specific
 
 [![lint](https://github.com/jflick58/wasm_exec/actions/workflows/lint.yml/badge.svg)](https://github.com/jflick58/yaart/actions/workflows/lint.yml)
 [![test](https://github.com/jflick58/yaart/actions/workflows/test.yml/badge.svg)](https://github.com/jflick58/wasm_exec/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/Jflick58/yaart/graph/badge.svg?token=2Q7NWW2F1U)](https://codecov.io/gh/Jflick58/yaart)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### Features: 
