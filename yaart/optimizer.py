@@ -1,14 +1,16 @@
 from pathlib import Path
 from typing import Optional, Dict, Tuple
-from md2pdf.core import md2pdf
+from md2pdf.core import md2pdf # type: ignore
 from yaart.llm import ResumeAssistant
 from yaart.scraper import JobScraper
 from yaart.db import JobDatabase
 from yaart.models import JobDescription
 from langchain.base_language import BaseLanguageModel
+from pydantic import SecretStr
 
 class ResumeOptimizer:
-    def __init__(self, llm: Optional[BaseLanguageModel] = None, api_key: Optional[str] = None):
+    def __init__(self, llm: Optional[BaseLanguageModel] = None, 
+                 api_key: Optional[SecretStr] = None):
         self.assistant = ResumeAssistant(llm=llm, api_key=api_key)
         self.scraper = JobScraper(assistant=self.assistant)
         self.db = JobDatabase()
@@ -46,7 +48,7 @@ class ResumeOptimizer:
                 return job_description
 
             # Try database first
-            job_description = self.db.get_job_description(jd_url)
+            job_description = self.db.get_job_description(jd_url) # type: ignore
             if job_description is not None:
                 return job_description
 

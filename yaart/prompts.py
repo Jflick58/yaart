@@ -22,7 +22,7 @@ Analyze the provided resume and job description to create a tailored version of 
 Follow these specific guidelines:
 
 1. Summary Section:
-   - Modify the summary to follow this template: "[Title] with [N-years] of experience in [industry if relevant]. Some career highlights include: [Projects/accomplishments relevant to JD's responsibilities]. I would like to leverage my experience to [outcome the role is looking for] at [company name and its goal/product type]"
+   - Modify the summary to follow this template: "[Title] with [N-years] of experience in [industry if relevant]. Some career highlights include: [Projects/accomplishments relevant to JD's responsibilities]. I would like to leverage my experience to [outcome the role is looking for] at [company name and its goal/product type]" 
    - Explicitly mention the company name in a meaningful way
    - Focus on achievements that directly relate to the job requirements
    - Highlight the most relevant technical skills from your experience
@@ -75,4 +75,4 @@ Remember to:
 - Demonstrate impact and results
 
 Return the tailored resume information in the specified JSON structure.
-"""
+""" # noqa: E501

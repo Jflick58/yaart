@@ -1,6 +1,5 @@
 import pytest
 import sqlite3
-import json
 from yaart.db import JobDatabase
 from yaart.models import JobDescription, JobRequirements
 

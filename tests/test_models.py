@@ -1,4 +1,3 @@
-import pytest
 from yaart.models import (
     JobRequirements,
     JobDescription,

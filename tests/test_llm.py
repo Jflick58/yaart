@@ -1,10 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from yaart.llm import ResumeAssistant
-from yaart.models import JobDescription, JobRequirements, TailoredResume
-from langchain.schema import HumanMessage, AIMessage
-from langchain_core.outputs import LLMResult
-from langchain.schema.runnable import RunnableParallel
+from yaart.models import JobDescription, JobRequirements
 from langchain.output_parsers import PydanticOutputParser
 import json
 
@@ -139,7 +136,11 @@ def test_parse_jd_invalid_response(mock_llm):
 
 @patch('yaart.llm.PydanticOutputParser')
 @patch('yaart.llm.PromptTemplate')
-def test_tailor_resume_success(mock_prompt, mock_parser, mock_llm, sample_job_description, sample_tailored_resume_dict):
+def test_tailor_resume_success(mock_prompt, 
+                               mock_parser, 
+                               mock_llm, 
+                               sample_job_description, 
+                               sample_tailored_resume_dict):
     mock_tailored_resume = MagicMock()
     mock_tailored_resume.to_markdown.return_value = "# Tailored Resume"
     mock_tailored_resume.model_dump.return_value = sample_tailored_resume_dict

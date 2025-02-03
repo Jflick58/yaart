@@ -1,7 +1,6 @@
 import pytest
 from pathlib import Path
-import json
-from unittest.mock import Mock, patch, AsyncMock, MagicMock
+from unittest.mock import patch, AsyncMock, MagicMock
 from yaart.optimizer import ResumeOptimizer
 from yaart.models import JobDescription, JobRequirements
 from yaart.scraper import JobScraper
@@ -30,7 +29,7 @@ def mock_optimizer():
     with patch('yaart.optimizer.ResumeAssistant') as mock_assistant, \
          patch('yaart.optimizer.JobScraper') as mock_scraper, \
          patch('yaart.optimizer.JobDatabase') as mock_db, \
-         patch('yaart.optimizer.md2pdf') as mock_md2pdf:
+         patch('yaart.optimizer.md2pdf'):
         
         optimizer = ResumeOptimizer(api_key="test-key")
         optimizer.assistant = mock_assistant
@@ -132,7 +131,8 @@ def test_generate_documents_pdf_error(mock_optimizer, tmp_path):
     markdown_dir.mkdir()
     pdf_dir.mkdir()
     
-    with patch('yaart.optimizer.md2pdf', side_effect=Exception("PDF generation failed")):
+    with patch('yaart.optimizer.md2pdf', 
+               side_effect=Exception("PDF generation failed")):
         with pytest.raises(ValueError) as exc_info:
             mock_optimizer.generate_documents(
                 "# Test Resume",
@@ -143,7 +143,9 @@ def test_generate_documents_pdf_error(mock_optimizer, tmp_path):
     assert "Failed to generate PDF" in str(exc_info.value)
 
 @pytest.mark.asyncio
-async def test_optimize_resume_tailor_error(mock_optimizer, mock_job_description, tmp_path):
+async def test_optimize_resume_tailor_error(mock_optimizer, 
+                                            mock_job_description, 
+                                            tmp_path):
     base_resume = tmp_path / "base_resume.md"
     base_resume.write_text("# Test Resume")
     
@@ -167,7 +169,8 @@ async def test_optimize_resume_tailor_error(mock_optimizer, mock_job_description
 @pytest.mark.asyncio
 async def test_get_job_description_from_scraper(mock_optimizer, mock_job_description):
     mock_optimizer.db.get_job_description.return_value = None
-    mock_optimizer.scraper.scrape_job_description = AsyncMock(return_value=mock_job_description)
+    mock_optimizer.scraper.scrape_job_description = AsyncMock(
+        return_value=mock_job_description)
     
     result = await mock_optimizer.get_job_description("https://example.com/job")
     
@@ -193,7 +196,9 @@ def test_generate_documents(mock_optimizer, tmp_path):
     assert markdown_path.read_text() == "# Test Resume"
 
 @pytest.mark.asyncio
-async def test_optimize_resume_with_new_jd(mock_optimizer, mock_job_description, tmp_path):
+async def test_optimize_resume_with_new_jd(mock_optimizer, 
+                                           mock_job_description, 
+                                           tmp_path):
     base_resume = tmp_path / "base_resume.md"
     base_resume.write_text("# Test Resume")
     
@@ -203,7 +208,8 @@ async def test_optimize_resume_with_new_jd(mock_optimizer, mock_job_description,
     (output_dir / "PDF").mkdir()
     
     mock_optimizer.db.get_job_description.side_effect = [None, mock_job_description]
-    mock_optimizer.scraper.scrape_job_description = AsyncMock(return_value=mock_job_description)
+    mock_optimizer.scraper.scrape_job_description = AsyncMock(
+        return_value=mock_job_description)
     mock_optimizer.assistant.tailor_resume.return_value = "# Tailored Resume"
     
     result = await mock_optimizer.optimize_resume(

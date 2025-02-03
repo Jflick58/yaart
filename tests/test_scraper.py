@@ -87,7 +87,8 @@ async def test_scrape_job_description_html_parsing(mock_assistant):
 async def test_scrape_job_description_http_error(mock_assistant):
     # Setup mock client to raise HTTPError
     mock_client = AsyncMock()
-    mock_client.__aenter__.return_value.get.side_effect = httpx.HTTPError("Failed to fetch")
+    mock_client.__aenter__.return_value.get.side_effect = httpx.HTTPError(
+        "Failed to fetch")
     
     # Create scraper instance
     scraper = JobScraper(assistant=mock_assistant)

@@ -1,14 +1,16 @@
-from typing import Dict, Optional
+from typing import Optional
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain.base_language import BaseLanguageModel
+from pydantic import SecretStr
 from yaart.models import JobDescription, TailoredResume
 from yaart.prompts import PARSE_JD_PROMPT, TAILOR_RESUME_PROMPT
 import json
 
 class ResumeAssistant:
-    def __init__(self, llm: Optional[BaseLanguageModel] = None, api_key: Optional[str] = None):
+    def __init__(self, llm: Optional[BaseLanguageModel] = None, 
+                 api_key: Optional[SecretStr] = None):
         if llm:
             self.llm = llm
         elif api_key:
@@ -23,7 +25,9 @@ class ResumeAssistant:
         prompt = PromptTemplate(
             template=PARSE_JD_PROMPT,
             input_variables=["text"],
-            partial_variables={"format_instructions": self.jd_parser.get_format_instructions()}
+            partial_variables={
+                "format_instructions": self.jd_parser.get_format_instructions()
+                }
         )
 
         try:
@@ -38,12 +42,15 @@ class ResumeAssistant:
         except Exception as e:
             raise ValueError(f"Failed to parse job description: {str(e)}")
 
-    def tailor_resume(self, resume_content: str, job_description: JobDescription) -> str:
+    def tailor_resume(self, resume_content: str, 
+                      job_description: JobDescription) -> str:
         """Tailor resume content to match job description"""
         prompt = PromptTemplate(
             template=TAILOR_RESUME_PROMPT,
             input_variables=["resume", "job_description"],
-            partial_variables={"format_instructions": self.resume_parser.get_format_instructions()}
+            partial_variables={
+                "format_instructions": self.resume_parser.get_format_instructions()
+                }
         )
 
         try:
