@@ -30,6 +30,9 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install glib gobject-introspection gtk+3
+          echo "PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+          echo "DYLD_LIBRARY_PATH=/opt/homebrew/lib:/usr/local/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+          echo "GI_TYPELIB_PATH=/opt/homebrew/lib/girepository-1.0:/usr/local/lib/girepository-1.0:$GI_TYPELIB_PATH" >> $GITHUB_ENV
       - name: Set up Python ${{ matrix.python-version }}
         uses: "./.github/actions/poetry_setup"
         with:
@@ -46,6 +49,10 @@ jobs:
                 poetry install --only=main,dev --all-extras
               fi
       - name: Run ${{matrix.test-type}} tests
+        env: 
+          PKG_CONFIG_PATH: /opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:${{ env.PKG_CONFIG_PATH }}
+          DYLD_LIBRARY_PATH: /opt/homebrew/lib:/usr/local/lib:${{ env.DYLD_LIBRARY_PATH }}
+          GI_TYPELIB_PATH: /opt/homebrew/lib/girepository-1.0:/usr/local/lib/girepository-1.0:${{ env.GI_TYPELIB_PATH }}
         run: |
           if [ "${{ matrix.test-type }}" == "core" ]; then
             make test
