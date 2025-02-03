@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yaart"
-version = "0.1.0"
+version = "1.0.0"
 description = "Yet Another AI Resume Tool"
 authors = ["Justin Flick <Justinjayflick@gmail.com>"]
 readme = "README.md"
