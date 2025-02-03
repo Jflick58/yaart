@@ -48,8 +48,9 @@ jobs:
                 echo "Running extended tests, installing dependencies with poetry..."
                 poetry install --only=main,dev --all-extras
               fi
-      - name: Run ${{matrix.test-type}} tests
-        env: 
+      - name: Run ${{matrix.test-type}} tests (Unix)
+        if: runner.os != 'Windows'
+        env:
           PKG_CONFIG_PATH: /opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:${{ env.PKG_CONFIG_PATH }}
           DYLD_LIBRARY_PATH: /opt/homebrew/lib:/usr/local/lib:${{ env.DYLD_LIBRARY_PATH }}
           GI_TYPELIB_PATH: /opt/homebrew/lib/girepository-1.0:/usr/local/lib/girepository-1.0:${{ env.GI_TYPELIB_PATH }}
@@ -59,6 +60,17 @@ jobs:
           else
             make extended_tests
           fi
+
+      - name: Run ${{matrix.test-type}} tests (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if ("${{ matrix.test-type }}" -eq "core") {
+            make test
+          } else {
+            make extended_tests
+          }
+
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
