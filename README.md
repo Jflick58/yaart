@@ -1,6 +1,10 @@
 # YAART - Yet Another AI Resume Tool
 
-Another Python package that leverages AI to automatically tailor your resume to specific job descriptions, optimizing your resume content to highlight relevant skills and experiences.
+Python package that leverages AI to automatically tailor your resume to specific job descriptions, optimizing your resume content to highlight relevant skills and experiences.
+
+[![lint](https://github.com/jflick58/wasm_exec/actions/workflows/lint.yml/badge.svg)](https://github.com/jflick58/yaart/actions/workflows/lint.yml)
+[![test](https://github.com/jflick58/yaart/actions/workflows/test.yml/badge.svg)](https://github.com/jflick58/wasm_exec/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### Features: 
 - Generates editable Markdown files so you can modify the AI-optimized resume. 

@@ -35,7 +35,7 @@ lint lint_diff:
 TEST_FILE ?= tests/
 
 test:
-	poetry run pytest --cov-branch --cov-report=xml
+	poetry run pytest --cov --cov-report=xml
 
 help:
 	@echo '----'
