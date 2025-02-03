@@ -26,13 +26,37 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Add system dependencies for macOS
+            # Add system dependencies for macOS
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install glib gobject-introspection gtk+3
+          brew install pkg-config glib gobject-introspection gtk+3
           echo "PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
           echo "DYLD_LIBRARY_PATH=/opt/homebrew/lib:/usr/local/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
           echo "GI_TYPELIB_PATH=/opt/homebrew/lib/girepository-1.0:/usr/local/lib/girepository-1.0:$GI_TYPELIB_PATH" >> $GITHUB_ENV
+
+      # Add system dependencies for Windows
+      - name: Install system dependencies (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Download and install MSYS2
+          $msys2Path = "C:\msys64"
+          if (-not (Test-Path $msys2Path)) {
+            choco install msys2 -y
+          }
+          
+          # Add MSYS2 to PATH
+          $env:PATH = "$msys2Path\usr\bin;$msys2Path\mingw64\bin;$env:PATH"
+          
+          # Update and install required packages
+          C:\msys64\usr\bin\bash -lc 'pacman --noconfirm -Syu'
+          C:\msys64\usr\bin\bash -lc 'pacman --noconfirm -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-gobject-introspection mingw-w64-x86_64-glib2 mingw-w64-x86_64-pkg-config'
+          
+          # Set environment variables
+          echo "PATH=C:\msys64\mingw64\bin;C:\msys64\usr\bin;$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "PKG_CONFIG_PATH=C:\msys64\mingw64\lib\pkgconfig" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "GI_TYPELIB_PATH=C:\msys64\mingw64\lib\girepository-1.0" | Out-File -FilePath $env:GITHUB_ENV -Append
       - name: Set up Python ${{ matrix.python-version }}
         uses: "./.github/actions/poetry_setup"
         with:
@@ -64,6 +88,10 @@ jobs:
       - name: Run ${{matrix.test-type}} tests (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
+        env: 
+          PATH: C:\msys64\mingw64\bin;C:\msys64\usr\bin;${{ env.PATH }}
+          PKG_CONFIG_PATH: C:\msys64\mingw64\lib\pkgconfig
+          GI_TYPELIB_PATH: C:\msys64\mingw64\lib\girepository-1.0
         run: |
           if ("${{ matrix.test-type }}" -eq "core") {
             make test
