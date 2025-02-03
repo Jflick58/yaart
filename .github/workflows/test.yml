@@ -1,0 +1,55 @@
+name: Test
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+          - macos
+          - windows
+        python-version:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+        test-type:
+          - core
+        include:
+          - experimental: false
+          - python-version: "3.12"
+            experimental: true
+    continue-on-error: ${{ matrix.experimental }}
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: "./.github/actions/poetry_setup"
+        with:
+          python-version: ${{ matrix.python-version }}
+          python-allow-prereleases: ${{ matrix.experimental }}
+          poetry-version: "1.6.1"
+          cache-key: ${{ matrix.test-type }}
+          install-command: |
+              if [ "${{ matrix.test-type }}" == "core" ]; then
+                echo "Running core tests, installing dependencies with poetry..."
+                poetry install --only=main,dev
+              else
+                echo "Running extended tests, installing dependencies with poetry..."
+                poetry install --only=main,dev --all-extras
+              fi
+      - name: Run ${{matrix.test-type}} tests
+        run: |
+          if [ "${{ matrix.test-type }}" == "core" ]; then
+            make test
+          else
+            make extended_tests
+          fi
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+        shell: bash

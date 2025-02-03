@@ -17,7 +17,7 @@ class JobScraper:
         try:
             async with httpx.AsyncClient(headers=self.headers, follow_redirects=True) as client:
                 response = await client.get(url)
-                response.raise_for_status()
+                await response.aread()
                 
                 # Parse HTML and extract main content
                 soup = BeautifulSoup(response.text, 'html.parser')

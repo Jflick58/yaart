@@ -29,6 +29,10 @@ class ResumeAssistant:
         try:
             chain = prompt | self.llm | self.jd_parser
             result = chain.invoke({"text": text})
+            if isinstance(result, dict) and "text" in result:
+                result = self.jd_parser.invoke(result["text"])
+            if not isinstance(result, JobDescription):
+                raise ValueError("Parser did not return a JobDescription object")
             result.url = url
             return result
         except Exception as e:
@@ -43,7 +47,6 @@ class ResumeAssistant:
         )
 
         try:
-            # Get structured resume data
             chain = prompt | self.llm
             result = chain.invoke({
                 "resume": resume_content,
@@ -51,17 +54,16 @@ class ResumeAssistant:
             })
             
             print("\n=== Debug: LLM Output ===")
-            print(json.dumps(result.content, indent=2))
+            content = result.get("text", "{}")
+            print(json.dumps(content, indent=2))
             print("=======================\n")
             
-            # Parse the result into TailoredResume
-            tailored_resume = self.resume_parser.parse(result.content)
+            tailored_resume = self.resume_parser.parse(content)
             
             print("\n=== Debug: Parsed Resume Structure ===")
             print(json.dumps(tailored_resume.model_dump(), indent=2))
             print("================================\n")
             
-            # Convert to markdown
             return tailored_resume.to_markdown()
         except Exception as e:
             print("\n=== Debug: Error Details ===")

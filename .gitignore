@@ -3,3 +3,6 @@ jobs.db
 Markdown/.DS_Store
 PDF/.DS_Store
 *.pyc
+.coverage
+.DS_Store
+.DS_Store
