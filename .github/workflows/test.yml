@@ -25,6 +25,11 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
+      # Add system dependencies for macOS
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install glib gobject-introspection gtk+3
       - name: Set up Python ${{ matrix.python-version }}
         uses: "./.github/actions/poetry_setup"
         with:
