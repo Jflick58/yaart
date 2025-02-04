@@ -13,7 +13,11 @@ Python package that leverages AI to automatically tailor your resume to specific
 - Supports custom CSS styles when generating a PDF resume. 
 - Stores all jobs in a sqllite database so you can track your applications. 
 - Leverages Pydantic output parsing for consistent generation. 
-- Intended to be plug-and-play with different models - succesfully tested with o1-preview, gpt-4o, and claude-3-5-sonnet-20241022
+- Intended to be plug-and-play with different models - succesfully tested with:
+    - o1-preview
+    - gpt-4o
+    - claude-3-5-sonnet-20241022
+    - o3-mini
 
 **Note: I built this for my own use - sharing in case it is useful to others.**
 
