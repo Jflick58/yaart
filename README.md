@@ -41,9 +41,9 @@ Optional text in case the scraper fails...
 """
 
 async def main():
-    # Initialize LLM (GPT-4 Optimized)
+    # Initialize LLM 
     llm = ChatOpenAI(
-        model="gpt-4o",  # GPT-4 Optimized is default
+        model="gpt-4o",
         temperature=0.2,
         api_key=os.getenv("OPENAI_API_KEY")
     )
